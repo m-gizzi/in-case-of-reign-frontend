@@ -1,6 +1,7 @@
 let CURRENT_USER, COUNTER, CASES, selectedCases, RATING , OPTIONS, BUNDLES, OPTIONS_COUNTER, PICS;
 const LOG_IN_FORM = document.querySelector(".create-user-form");
 const MAIN = document.querySelector("#center-field");
+const API_URL = "http://localhost:3000/"
 
 function main(){
     fetchCases();
@@ -27,7 +28,7 @@ function addFormListener(){
             })
         }
 
-        fetch("https://rocky-oasis-10383.herokuapp.com/users", reqObj)
+        fetch(`${API_URL}users`, reqObj)
         .then(resp => resp.json())
         .then(userData => {
             CURRENT_USER = userData.data;
@@ -191,7 +192,7 @@ function addBundleListener(){
             })
         }
 
-        fetch("https://rocky-oasis-10383.herokuapp.com/bundles", reqObj)
+        fetch(`${API_URL}bundles`, reqObj)
         .then(resp => resp.json())
         .then(bundle => {
             BUNDLES.push(bundle.data.attributes);
@@ -228,7 +229,7 @@ function renderDeleteList(){
 }
 
 function fetchCurrentUser(myFunc){
-    fetch(`https://rocky-oasis-10383.herokuapp.com/users/${CURRENT_USER.id}`)
+    fetch(`${API_URL}users/${CURRENT_USER.id}`)
         .then(resp => resp.json())
         .then(userData => {
             CURRENT_USER = userData.data;
@@ -241,7 +242,7 @@ function addDeleteListener(){
     deleteList.addEventListener("click", event => {
         if (event.target.className === "delete-btn"){
             const caseId = parseInt(event.target.dataset.id)
-            fetch(`https://rocky-oasis-10383.herokuapp.com/cases/${caseId}`, {method: "DELETE"})
+            fetch(`${API_URL}cases/${caseId}`, {method: "DELETE"})
             .then(resp => {
                 fetchCurrentUser(renderCreateForm)
             })
@@ -256,9 +257,9 @@ function addDeleteBundleListener(){
     delBunLis.addEventListener("click", event => {
         if (event.target.className === "delete-btn"){
             const bundleId = parseInt(event.target.dataset.id)
-            fetch(`https://rocky-oasis-10383.herokuapp.com/bundles/${bundleId}`, {method: "DELETE"})
+            fetch(`${API_URL}bundles/${bundleId}`, {method: "DELETE"})
             .then(resp => {
-                fetch("https://rocky-oasis-10383.herokuapp.com/bundles")
+                fetch(`${API_URL}bundles`)
                 .then(resp => resp.json())
                 .then(bundles => {
                     BUNDLES = bundles.data.map(bundle => bundle.attributes);
@@ -298,7 +299,7 @@ function addCreateFormListener(){
             })
         }
 
-        fetch("https://rocky-oasis-10383.herokuapp.com/cases", reqObj)
+        fetch(`${API_URL}cases`, reqObj)
         .then(resp => resp.json())
         .then(cas => {
             CASES.push(cas.data);
@@ -312,7 +313,7 @@ function addCreateFormListener(){
 }
 
 function fetchCases(){
-    fetch("https://rocky-oasis-10383.herokuapp.com/cases")
+    fetch(`${API_URL}cases`)
     .then(resp => resp.json())
     .then(cases => {
         CASES = cases.data;
@@ -324,7 +325,7 @@ function fetchCases(){
 }
 
 function fetchBundles(){
-    fetch("https://rocky-oasis-10383.herokuapp.com/bundles")
+    fetch(`${API_URL}bundles`)
     .then(resp => resp.json())
     .then(bundles => {
         BUNDLES = bundles.data.map(bundle => bundle.attributes);
@@ -444,7 +445,7 @@ function addButtonListeners(){
         } else if (event.target.className === "return-to-menu"){
             MAIN.style = 'margin-top: 10px;'
             MAIN.innerHTML = ''
-            fetch("https://rocky-oasis-10383.herokuapp.com/cases")
+            fetch(`${API_URL}cases`)
             .then(resp => resp.json())
             .then(cases => {
                 CASES = cases.data;
